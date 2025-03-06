@@ -25,7 +25,7 @@ export default function HomePage() {
       <Container
         maxWidth={false}
         sx={{ backgroundColor: "#F6F6F6", flexGrow: 1 }}
-        className="flex min-h-screen w-full flex-col items-center justify-start p-4"
+        className="flex w-full flex-col items-center justify-start p-4"
       >
         {/* Product List */}
         <ProductList />
