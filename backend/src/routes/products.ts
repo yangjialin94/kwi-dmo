@@ -1,9 +1,7 @@
 import { Router } from "express";
 import { Database } from "sqlite";
 
-/**
- * Product routes
- */
+// Product routes
 const productRoutes = (db: Database) => {
   const router = Router();
 

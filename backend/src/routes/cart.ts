@@ -1,9 +1,7 @@
 import { Router } from "express";
 import { Database } from "sqlite";
 
-/**
- * Cart routes
- */
+// Cart routes
 const cartRoutes = (db: Database) => {
   const router = Router();
 
@@ -100,7 +98,7 @@ const cartRoutes = (db: Database) => {
     })();
   });
 
-  // Remove product from cart
+  // Remove a product from cart
   router.delete("/remove/:product_id", async (req, res) => {
     try {
       const { product_id } = req.params;

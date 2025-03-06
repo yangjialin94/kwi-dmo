@@ -3,9 +3,7 @@ import { Database } from "sqlite";
 import productRoutes from "./products";
 import cartRoutes from "./cart";
 
-/**
- * Main routes
- */
+// Main routes
 const routes = (db: Database) => {
   const router = Router();
 
