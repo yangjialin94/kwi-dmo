@@ -1,8 +1,8 @@
+// File for accessing the API
+
 import { API_URL } from "../lib/constants";
 
-/**
- * Wrapper function for fetching data from the API
- */
+// Wrapper function for fetching data from the API
 async function fetchAPI(endpoint: string, options = {}) {
   try {
     const response = await fetch(`${API_URL}${endpoint}`, options);
@@ -24,23 +24,17 @@ async function fetchAPI(endpoint: string, options = {}) {
   }
 }
 
-/**
- * Fetch all products
- */
+// Fetch all products
 export async function fetchProducts() {
   return await fetchAPI("/products");
 }
 
-/**
- * Fetch the cart
- */
+// Fetch the cart
 export async function fetchCart() {
   return await fetchAPI("/cart");
 }
 
-/**
- * Add a product to the cart
- */
+// Add a product to the cart
 export async function addToCart(productId: string, quantity: number) {
   return await fetchAPI(`/cart/add`, {
     method: "POST",
@@ -51,16 +45,12 @@ export async function addToCart(productId: string, quantity: number) {
   });
 }
 
-/**
- * Remove a product from the cart
- */
+// Remove a product from the cart
 export async function removeFromCart(productId: string) {
   return await fetchAPI(`/cart/remove/${productId}`, { method: "DELETE" });
 }
 
-/**
- * Checkout the cart
- */
+// Checkout the cart
 export async function checkout() {
   return await fetchAPI("/cart/checkout", { method: "POST" });
 }

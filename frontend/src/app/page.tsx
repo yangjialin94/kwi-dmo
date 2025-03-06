@@ -7,7 +7,8 @@ import Header from "../components/Header";
 import ProductList from "../components/ProductList";
 import { useStore } from "../store/useStore";
 
-export default function Home() {
+// Home page
+export default function HomePage() {
   const { fetchData } = useStore();
 
   // Fetch products and cart data
@@ -26,6 +27,7 @@ export default function Home() {
         sx={{ backgroundColor: "#F6F6F6", flexGrow: 1 }}
         className="flex min-h-screen w-full flex-col items-center justify-start p-4"
       >
+        {/* Product List */}
         <ProductList />
       </Container>
     </main>

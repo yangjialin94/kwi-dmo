@@ -8,9 +8,11 @@ import { Product } from "../lib/types";
 import { formatPrice } from "../lib/utils";
 import { useStore } from "../store/useStore";
 
+// ProductCard component
 export default function ProductCard({ product }: { product: Product }) {
-  const [quantity, setQuantity] = useState(1);
   const { addToCart } = useStore();
+
+  const [quantity, setQuantity] = useState(1);
 
   // Handle quantity state
   const handleIncreaseQuantity = () => {
@@ -51,6 +53,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.name}
         </Typography>
 
+        {/* Prices */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, marginTop: 1 }}>
           {/* Current Price */}
           {product.discount > 0 && (

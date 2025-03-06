@@ -1,3 +1,5 @@
+// File for global state management using zustand
+
 import { create } from "zustand";
 
 import * as api from "../services/api";

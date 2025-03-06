@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { useStore } from "../store/useStore";
 import ProductCard from "./ProductCard";
 
+// ProductList component
 export default function ProductList() {
   const { products } = useStore();
 

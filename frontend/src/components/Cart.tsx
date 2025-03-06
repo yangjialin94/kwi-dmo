@@ -10,11 +10,13 @@ interface CartProps {
   onSetCheckoutMessage: (message: string) => void;
 }
 
+// Cart component
 export default function Cart({ onCloseCart, onSetCheckoutMessage }: CartProps) {
   const { cart, totalPrice, totalSavings, checkout } = useStore();
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
+  // Handle checkout
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     const response = await checkout();
@@ -31,7 +33,7 @@ export default function Cart({ onCloseCart, onSetCheckoutMessage }: CartProps) {
 
   return (
     <Box sx={{ width: 350, padding: 2, bgcolor: "white", borderRadius: 2, boxShadow: 3 }}>
-      {/* Cart Header */}
+      {/* Header */}
       <Typography variant="h6" fontWeight="bold" textAlign="center">
         Cart
       </Typography>

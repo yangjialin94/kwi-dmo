@@ -13,14 +13,17 @@ interface CartItemProps {
   item: CartItemType;
 }
 
+// CartItem component
 const CartItem = ({ item }: CartItemProps) => {
   const { addToCart, removeFromCart } = useStore();
+
   const [quantity, setQuantity] = useState(item.quantity);
 
   const itemDiscount = (item.price * item.discount) / 100;
   const discountedPrice = item.price - itemDiscount;
   const subtotal = discountedPrice * item.quantity;
 
+  // Update quantity state when item quantity changes
   useEffect(() => {
     setQuantity(item.quantity);
   }, [item.quantity]);

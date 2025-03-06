@@ -11,15 +11,18 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+import { PORTFOLIO_URL } from "../lib/constants";
 import { useStore } from "../store/useStore";
 import Cart from "./Cart";
 
+// Header component
 export default function Header() {
+  const { totalQuantity } = useStore();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [checkoutMessage, setCheckoutMessage] = useState("");
 
-  const { totalQuantity } = useStore();
-
+  // Handle cart popover
   const handleOpenCart = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -44,7 +47,7 @@ export default function Header() {
           <Typography
             variant="h6"
             component="a"
-            href="https://jialinyang.com"
+            href={`${PORTFOLIO_URL}`}
             target="_blank"
             rel="noopener noreferrer"
             sx={{ fontWeight: "600", color: "inherit" }}
@@ -76,6 +79,8 @@ export default function Header() {
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
+
+          {/* Cart Popover */}
           <Popover
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
