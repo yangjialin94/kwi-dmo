@@ -43,8 +43,8 @@ This project provides **product listing, cart management, and checkout functiona
 ## 🔥 Clone the Repo
 
 ```sh
-git clone https://github.com/yangjialin94/kwi-demo.git
-cd kwi-demo
+git clone https://github.com/yangjialin94/nodejs-mui-demo.git
+cd nodejs-mui-demo
 ```
 
 ---
