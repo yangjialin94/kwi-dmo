@@ -1,9 +1,13 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
+// Determine the database path based on the environment
+const DB_PATH = process.env.DOCKER_ENV === "true" ? "/app/database.sqlite" : "./database.sqlite";
+
+// Initialize the database
 export const initializeDB = async () => {
   const db = await open({
-    filename: "./database.sqlite",
+    filename: DB_PATH,
     driver: sqlite3.Database,
   });
 
