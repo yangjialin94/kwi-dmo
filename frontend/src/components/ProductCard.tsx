@@ -22,8 +22,8 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   // Handle add to cart
-  const handleAddToCart = async (productId: number) => {
-    addToCart(productId);
+  const handleAddToCart = async () => {
+    addToCart(product.id, quantity);
   };
 
   return (
@@ -104,7 +104,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <Button
             variant="contained"
             size="small"
-            onClick={() => handleAddToCart(product.id)}
+            onClick={handleAddToCart}
             sx={{ borderRadius: 2, fontWeight: "bold" }}
           >
             Add

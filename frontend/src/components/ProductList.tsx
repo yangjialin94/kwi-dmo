@@ -1,13 +1,11 @@
 import { Box } from "@mui/material";
 
-import { Product } from "../types/types";
+import { useStore } from "../store/useStore";
 import ProductCard from "./ProductCard";
 
-interface ProductListProps {
-  products: Product[];
-}
+export default function ProductList() {
+  const { products } = useStore();
 
-export default function ProductList({ products }: ProductListProps) {
   return (
     <Box
       sx={{

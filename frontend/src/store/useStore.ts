@@ -1,26 +1,54 @@
 import { create } from "zustand";
 
 import { CartItem, Product } from "../lib/types";
-import { addToCart, checkout, fetchCart, fetchProducts, removeFromCart } from "../services/api";
+import * as api from "../services/api";
 
 import { CartItem } from "./../types/types";
 
 interface StoreState {
   products: Product[];
   cart: CartItem[];
+  totalQuantity: number;
+  totalPrice: number;
+  totalSavings: number;
+
+  calculateTotals: () => void;
   fetchData: () => Promise<void>;
-  addToCart: (productId: number) => Promise<void>;
-  removeFromCart: (productId: number) => Promise<void>;
+  addToCart: (productId: string, quantity: number) => Promise<void>;
+  removeFromCart: (productId: string) => Promise<void>;
   checkout: () => Promise<void>;
 }
 
-export const useStore = create<StoreState>((set) => ({
+// Create a zustand store
+export const useStore = create<StoreState>((set, get) => ({
   products: [],
   cart: [],
+  totalQuantity: 0,
+  totalPrice: 0,
+  totalSavings: 0,
+
+  // Calculate cart totals
+  calculateTotals: () => {
+    const { cart } = get();
+    let totalQuantity = 0;
+    let totalPrice = 0;
+    let totalSavings = 0;
+
+    cart.forEach((item) => {
+      totalQuantity += item.quantity;
+      totalPrice += (item.price - item.discount) * item.quantity;
+      totalSavings += item.discount * item.quantity;
+    });
+
+    set({ totalQuantity, totalPrice, totalSavings });
+  },
 
   // Fetch products and cart data
   fetchData: async () => {
-    const [productsResponse, cartResponse] = await Promise.all([fetchProducts(), fetchCart()]);
+    const [productsResponse, cartResponse] = await Promise.all([
+      api.fetchProducts(),
+      api.fetchCart(),
+    ]);
 
     if (productsResponse.success) {
       set({ products: productsResponse.data });
@@ -30,16 +58,19 @@ export const useStore = create<StoreState>((set) => ({
 
     if (cartResponse.success) {
       set({ cart: cartResponse.data });
+      get().calculateTotals();
     } else {
       console.error("Error fetching cart:", cartResponse.message);
     }
   },
 
   // Add item to cart
-  addToCart: async (productId) => {
-    const response = await addToCart(productId);
+  addToCart: async (productId, quantity) => {
+    const response = await api.addToCart(productId, quantity);
+    console.log(response);
     if (response.success) {
-      set(() => ({ cart: response.data }));
+      set(() => ({ cart: response.data.cart }));
+      get().calculateTotals();
     } else {
       console.error("Error adding to cart:", response.message);
     }
@@ -47,9 +78,10 @@ export const useStore = create<StoreState>((set) => ({
 
   // Remove item from cart
   removeFromCart: async (productId) => {
-    const response = await removeFromCart(productId);
+    const response = await api.removeFromCart(productId);
     if (response.success) {
       set((state) => ({ cart: state.cart.filter((item) => item.product_id !== productId) }));
+      get().calculateTotals();
     } else {
       console.error("Error removing from cart:", response.message);
     }
@@ -57,9 +89,9 @@ export const useStore = create<StoreState>((set) => ({
 
   // Checkout (Clear cart)
   checkout: async () => {
-    const response = await checkout();
+    const response = await api.checkout();
     if (response.success) {
-      set({ cart: [] });
+      set({ cart: [], totalQuantity: 0, totalPrice: 0, totalSavings: 0 });
     } else {
       console.error("Error during checkout:", response.message);
     }

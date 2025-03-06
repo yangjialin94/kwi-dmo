@@ -36,13 +36,13 @@ export async function fetchCart() {
 /**
  * Add a product to the cart
  */
-export async function addToCart(productId: string) {
+export async function addToCart(productId: string, quantity: number) {
   return await fetchAPI("/cart/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ product_id: productId }),
+    body: JSON.stringify({ product_id: productId, product_qty: quantity }),
   });
 }
 

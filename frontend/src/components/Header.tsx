@@ -7,7 +7,7 @@ import Cart from "./Cart";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { cart } = useStore();
+  const { totalQuantity } = useStore();
 
   const handleOpenCart = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -61,7 +61,7 @@ export default function Header() {
               "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.2)" },
             }}
           >
-            <Badge badgeContent={cart.length} color="error">
+            <Badge badgeContent={totalQuantity} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
