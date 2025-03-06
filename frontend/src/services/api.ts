@@ -15,7 +15,12 @@ async function fetchAPI(endpoint: string, options = {}) {
     return { success: true, data: data };
   } catch (error) {
     console.error("API Error:", error);
-    return { success: false, message: error.message };
+
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
+    } else {
+      return { success: false, message: "An unknown API error occurred" };
+    }
   }
 }
 

@@ -23,7 +23,7 @@ export default function Cart({ onCloseCart, onSetCheckoutMessage }: CartProps) {
       onSetCheckoutMessage("✅ Checkout Successful!");
       onCloseCart();
     } else {
-      setCheckoutMessage(`❌ Checkout Failed: ${result.message}`);
+      onSetCheckoutMessage(`❌ Checkout Failed: ${response.message}`);
     }
 
     setIsCheckingOut(false);

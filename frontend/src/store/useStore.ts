@@ -1,10 +1,8 @@
-import { Product } from "@/types";
 import { create } from "zustand";
 
-import { CartItem, Product } from "../lib/types";
 import * as api from "../services/api";
 
-import { CartItem, Product } from "../types/types";
+import { CartItem, Product } from "../lib/types";
 
 interface StoreState {
   products: Product[];

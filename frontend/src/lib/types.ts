@@ -5,16 +5,16 @@ export interface Product {
   name: string;
   price: number;
   discount: number;
-  Image: string;
+  image: string;
 }
 
 export interface CartItem {
   id: number;
-  product_id: number;
+  product_id: string;
   name: string;
   price: number;
   discount: number;
-  Image: string;
+  image: string;
   quantity: number;
   subtotal: number;
   savings: number;

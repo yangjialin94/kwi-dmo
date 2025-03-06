@@ -4,9 +4,9 @@ import { Box, Button, Card, CardContent, CardMedia, IconButton, Typography } fro
 import { useState } from "react";
 
 import { API_DOMAIN } from "../lib/constants";
+import { Product } from "../lib/types";
 import { formatPrice } from "../lib/utils";
 import { useStore } from "../store/useStore";
-import { Product } from "../types/types";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);

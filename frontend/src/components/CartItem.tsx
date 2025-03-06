@@ -5,11 +5,15 @@ import { Box, CardMedia, IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { API_DOMAIN } from "../lib/constants";
+import { CartItem as CartItemType } from "../lib/types";
 import { formatPrice } from "../lib/utils";
 import { useStore } from "../store/useStore";
-import { CartItem as CartItemType } from "../types/types";
 
-const CartItem = ({ item }: CartItemType) => {
+interface CartItemProps {
+  item: CartItemType;
+}
+
+const CartItem = ({ item }: CartItemProps) => {
   const { addToCart, removeFromCart } = useStore();
   const [quantity, setQuantity] = useState(item.quantity);
 
