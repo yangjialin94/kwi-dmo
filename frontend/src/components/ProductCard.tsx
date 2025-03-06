@@ -24,6 +24,7 @@ export default function ProductCard({ product }: { product: Product }) {
   // Handle add to cart
   const handleAddToCart = async () => {
     addToCart(product.id, quantity);
+    setQuantity(1);
   };
 
   return (
@@ -31,12 +32,11 @@ export default function ProductCard({ product }: { product: Product }) {
       {/* Image */}
       <CardMedia
         component="img"
-        height="200"
         image={`${API_DOMAIN}${product.image}`}
         alt={product.name}
         sx={{
-          width: "100%",
           height: 250,
+          width: "100%",
           padding: 4,
           objectFit: "cover",
         }}

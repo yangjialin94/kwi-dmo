@@ -25,7 +25,11 @@ export const initializeDB = async () => {
       product_id TEXT NOT NULL,
       name TEXT NOT NULL,
       price REAL NOT NULL,
+      discount INTEGER DEFAULT 0,
+      image TEXT,
       quantity INTEGER DEFAULT 1,
+      subtotal REAL DEFAULT 0,
+      savings REAL DEFAULT 0,
       FOREIGN KEY (product_id) REFERENCES products(id)
     );
   `);

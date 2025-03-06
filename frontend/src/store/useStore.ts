@@ -1,9 +1,10 @@
+import { Product } from "@/types";
 import { create } from "zustand";
 
 import { CartItem, Product } from "../lib/types";
 import * as api from "../services/api";
 
-import { CartItem } from "./../types/types";
+import { CartItem, Product } from "../types/types";
 
 interface StoreState {
   products: Product[];
@@ -16,7 +17,7 @@ interface StoreState {
   fetchData: () => Promise<void>;
   addToCart: (productId: string, quantity: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
-  checkout: () => Promise<void>;
+  checkout: () => Promise<{ success: boolean; message?: string }>;
 }
 
 // Create a zustand store
@@ -36,8 +37,8 @@ export const useStore = create<StoreState>((set, get) => ({
 
     cart.forEach((item) => {
       totalQuantity += item.quantity;
-      totalPrice += (item.price - item.discount) * item.quantity;
-      totalSavings += item.discount * item.quantity;
+      totalPrice += item.subtotal ?? 0;
+      totalSavings += item.savings ?? 0;
     });
 
     set({ totalQuantity, totalPrice, totalSavings });
@@ -64,10 +65,10 @@ export const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  // Add item to cart
+  // Add item to cart or update quantity
   addToCart: async (productId, quantity) => {
     const response = await api.addToCart(productId, quantity);
-    console.log(response);
+
     if (response.success) {
       set(() => ({ cart: response.data.cart }));
       get().calculateTotals();
@@ -79,6 +80,7 @@ export const useStore = create<StoreState>((set, get) => ({
   // Remove item from cart
   removeFromCart: async (productId) => {
     const response = await api.removeFromCart(productId);
+
     if (response.success) {
       set((state) => ({ cart: state.cart.filter((item) => item.product_id !== productId) }));
       get().calculateTotals();
@@ -90,10 +92,13 @@ export const useStore = create<StoreState>((set, get) => ({
   // Checkout (Clear cart)
   checkout: async () => {
     const response = await api.checkout();
+
     if (response.success) {
       set({ cart: [], totalQuantity: 0, totalPrice: 0, totalSavings: 0 });
+      return { success: true };
     } else {
       console.error("Error during checkout:", response.message);
+      return { success: false, message: response.message };
     }
   },
 }));

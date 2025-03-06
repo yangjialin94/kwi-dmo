@@ -1,5 +1,14 @@
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { AppBar, Badge, Box, IconButton, Popover, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Badge,
+  Box,
+  IconButton,
+  Popover,
+  Snackbar,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 
 import { useStore } from "../store/useStore";
@@ -7,6 +16,8 @@ import Cart from "./Cart";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [checkoutMessage, setCheckoutMessage] = useState("");
+
   const { totalQuantity } = useStore();
 
   const handleOpenCart = (event: React.MouseEvent<HTMLElement>) => {
@@ -81,16 +92,23 @@ export default function Header() {
               sx: {
                 width: "350px",
                 maxHeight: "500px",
-                padding: 2,
                 overflowY: "auto",
                 borderRadius: 3,
               },
             }}
           >
-            <Cart />
+            <Cart onCloseCart={handleCloseCart} onSetCheckoutMessage={setCheckoutMessage} />
           </Popover>
         </Box>
       </Toolbar>
+
+      {/* Snackbar for checkout message */}
+      <Snackbar
+        open={Boolean(checkoutMessage)}
+        autoHideDuration={3000}
+        onClose={() => setCheckoutMessage("")}
+        message={checkoutMessage}
+      />
     </AppBar>
   );
 }

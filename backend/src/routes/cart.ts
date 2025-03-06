@@ -18,7 +18,7 @@ const cartRoutes = (db: Database) => {
     }
   });
 
-  // Add product to cart
+  // Add product to cart (or handle quantity changes)
   router.post("/add", (req, res) => {
     // Without doing this will cause an error
     (async () => {
@@ -31,8 +31,8 @@ const cartRoutes = (db: Database) => {
         }
 
         // Validate quantity
-        const quantity = product_qty ? parseInt(product_qty, 10) : 1;
-        if (quantity < 1) {
+        const quantityChanges = product_qty ? parseInt(product_qty, 10) : 1;
+        if (isNaN(quantityChanges)) {
           return res.status(400).json({ message: "❌ Invalid quantity" });
         }
 
@@ -42,20 +42,52 @@ const cartRoutes = (db: Database) => {
           return res.status(404).json({ message: "❌ Product not found" });
         }
 
-        // Update cart
-        const existingItem = await db.get("SELECT * FROM cart WHERE product_id = ?", [product_id]);
-        if (existingItem) {
-          await db.run("UPDATE cart SET quantity = quantity + ? WHERE product_id = ?", [
-            quantity,
-            product_id,
-          ]);
+        // Check if item exists in cart
+        const cartItem = await db.get("SELECT * FROM cart WHERE product_id = ?", [product_id]);
+        if (cartItem) {
+          // Calculate new quantity
+          const newQuantity = cartItem.quantity + quantityChanges;
+
+          // If new quantity is ≤ 0
+          if (newQuantity <= 0) {
+            await db.run("DELETE FROM cart WHERE product_id = ?", [product_id]);
+          } else {
+            // Update cart item
+            const appliedDiscount = Math.min(cartItem.discount, cartItem.price);
+            const newSubtotal = (cartItem.price - appliedDiscount) * newQuantity;
+            const newSavings = appliedDiscount * newQuantity;
+
+            await db.run(
+              "UPDATE cart SET quantity = ?, subtotal = ?, savings = ? WHERE product_id = ?",
+              [newQuantity, newSubtotal, newSavings, product_id]
+            );
+          }
         } else {
-          await db.run("INSERT INTO cart (product_id, name, price, quantity) VALUES (?, ?, ?, ?)", [
-            product.id,
-            product.name,
-            product.price,
-            quantity,
-          ]);
+          // If removing an item that is not in the cart
+          if (quantityChanges < 0) {
+            return res
+              .status(400)
+              .json({ message: "❌ Cannot remove an item that is not in the cart" });
+          }
+
+          // Add new item to cart
+          const appliedDiscount = Math.min(product.discount, product.price);
+          const subtotal = (product.price - appliedDiscount) * quantityChanges;
+          const savings = appliedDiscount * quantityChanges;
+
+          await db.run(
+            "INSERT INTO cart (product_id, name, price, discount, image, quantity, subtotal, savings) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [
+              product.id,
+              product.name,
+              product.price,
+              appliedDiscount,
+              product.image,
+              quantityChanges,
+              subtotal,
+              savings,
+            ]
+          );
         }
 
         // Return updated cart
@@ -69,7 +101,7 @@ const cartRoutes = (db: Database) => {
   });
 
   // Remove product from cart
-  router.delete("/:product_id", async (req, res) => {
+  router.delete("/remove/:product_id", async (req, res) => {
     try {
       const { product_id } = req.params;
       await db.run("DELETE FROM cart WHERE product_id = ?", [product_id]);

@@ -13,5 +13,9 @@ export interface CartItem {
   product_id: number;
   name: string;
   price: number;
+  discount: number;
+  Image: string;
   quantity: number;
+  subtotal: number;
+  savings: number;
 }

@@ -37,7 +37,7 @@ export async function fetchCart() {
  * Add a product to the cart
  */
 export async function addToCart(productId: string, quantity: number) {
-  return await fetchAPI("/cart/add", {
+  return await fetchAPI(`/cart/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,5 +57,5 @@ export async function removeFromCart(productId: string) {
  * Checkout the cart
  */
 export async function checkout() {
-  return await fetchAPI("/checkout", { method: "POST" });
+  return await fetchAPI("/cart/checkout", { method: "POST" });
 }
