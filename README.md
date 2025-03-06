@@ -125,6 +125,6 @@ docker-compose down
 🔹 Cart
 
 - GET /api/cart → Fetch cart items.
-- POST /api/cart/add → Add a product to the cart.
-- POST /api/cart/remove → Remove or decrease quantity.
+- POST /api/cart/add → Add a product to the cart or update the item quantity.
+- POST /api/cart/remove → Remove a product from the cart.
 - POST /api/cart/checkout → Checkout and clear the cart.
